@@ -50,10 +50,11 @@ There are two ways setup supabase when deploy saas on vercel
 #### 1.1. deploy to vercel
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FRocke1001feller%2Fnextjs-subscription-payments&env=NEXT_PUBLIC_SUPABASE_URL,SUPABASE_SERVICE_ROLE_KEY,NEXT_PUBLIC_SUPABASE_ANON_KEY&envDescription=Enter%20your%20Stripe%20API%20keys.&envLink=https%3A%2F%2Fdashboard.stripe.com%2Fapikeys&project-name=nextjs-subscription-payments&repository-name=nextjs-subscription-payments&external-id=https%3A%2F%2Fgithub.com%2FRocke1001feller%2Fnextjs-subscription-payments%2Ftree%2Fmain)
 
-#### [optional] 1.2. fill all the [supabase enviroments variables]
+#### [Best practice] 1.2. fill all the [supabase enviroments variables] and REDEPLOY
 > you can references `.env.supabase.integration.example`, fill value with your own
+> Copy & Paste
 
-| ![project setting](./public/project_envs.png) | ![all parameters](./public/all_13_envs.png) |
+| ![all parameters](./public/all_13_envs.png) | ![project setting](./public/project_envs.png) |
 |--------|--------|
 
 ### Step 2: Configure Auth
