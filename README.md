@@ -3,6 +3,7 @@
 
 > [!IMPORTANT]
 >  supabase + stripe + next.js, This tech stack will continue, any contributions is welcome.
+> cause vercel had declared that "[This repository has been archived by the owner on Jan 23, 2025. It is now read-only](https://github.com/vercel/nextjs-subscription-payments)"
 
 ## Features
 
@@ -25,17 +26,24 @@
 
 When deploying this template, the sequence of steps is important. Follow the steps below in order to get up and running.
 
-### Initiate Deployment
+### Step 1: Initiate Deployment
 
 #### Vercel Deploy Button
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnextjs-subscription-payments&env=NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,STRIPE_SECRET_KEY&envDescription=Enter%20your%20Stripe%20API%20keys.&envLink=https%3A%2F%2Fdashboard.stripe.com%2Fapikeys&project-name=nextjs-subscription-payments&repository-name=nextjs-subscription-payments&integration-ids=oac_VqOgBHqhEoFTPzGkPd7L0iH6&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnextjs-subscription-payments%2Ftree%2Fmain)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FRocke1001feller%2Fnextjs-subscription-payments&env=NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,STRIPE_SECRET_KEY&envDescription=Enter%20your%20Stripe%20API%20keys.&envLink=https%3A%2F%2Fdashboard.stripe.com%2Fapikeys&project-name=nextjs-subscription-payments&repository-name=nextjs-subscription-payments&integration-ids=oac_VqOgBHqhEoFTPzGkPd7L0iH6&external-id=https%3A%2F%2Fgithub.com%2FRocke1001feller%2Fnextjs-subscription-payments%2Ftree%2Fmain)
+> [!IMPORTANT]
+>  1. using vercel integration supabase, please check whether the necessary schema have setuped.
 
 The Vercel Deployment will create a new repository with this template on your GitHub account and guide you through a new Supabase project creation. The [Supabase Vercel Deploy Integration](https://vercel.com/integrations/supabase) will set up the necessary Supabase environment variables and run the [SQL migrations](./supabase/migrations/20230530034630_init.sql) to set up the Database schema on your account. You can inspect the created tables in your project's [Table editor](https://app.supabase.com/project/_/editor).
+![supabase schema setup or not](./public/supabase_schema_setup.png)
+> [!IMPORTANT]
+>  2. using supabase platform manually setup schema
 
 Should the automatic setup fail, please [create a Supabase account](https://app.supabase.com/projects), and a new project if needed. In your project, navigate to the [SQL editor](https://app.supabase.com/project/_/sql) and select the "Stripe Subscriptions" starter template from the Quick start section.
 
-### Configure Auth
+| ![setp 1](./public/supabase_sql_editor.png) | ![setp 2](./public/supabase_sql_execute.png) |![schema setup](./public/supabase_schema_setup.png) |
+|--------|--------|--------|
+### Step 2: Configure Auth
 
 Follow [this guide](https://supabase.com/docs/guides/auth/social-login/auth-github) to set up an OAuth app with GitHub and configure Supabase to use it as an auth provider.
 
@@ -61,13 +69,13 @@ Otherwise navigate to the [API settings](https://app.supabase.com/project/_/sett
 
 Congrats, this completes the Supabase setup, almost there!
 
-### Configure Stripe
+### Step 3: Configure Stripe
 
 Next, we'll need to configure [Stripe](https://stripe.com/) to handle test payments. If you don't already have a Stripe account, create one now.
 
 For the following steps, make sure you have the ["Test Mode" toggle](https://stripe.com/docs/testing) switched on.
 
-#### Create a Webhook
+#### 3.1 Create a Webhook
 
 We need to create a webhook in the `Developers` section of Stripe. Pictured in the architecture diagram above, this webhook is the piece that connects Stripe to your Vercel Serverless Functions.
 
@@ -78,11 +86,11 @@ We need to create a webhook in the `Developers` section of Stripe. Pictured in t
 1. Copy `Signing secret` as we'll need that in the next step (e.g `whsec_xxx`) (/!\ be careful not to copy the webook id we_xxxx).
 1. In addition to the `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` and the `STRIPE_SECRET_KEY` we've set earlier during deployment, we need to add the webhook secret as `STRIPE_WEBHOOK_SECRET` env var.
 
-#### Redeploy with new env vars
+#### 3.2 Redeploy with new env vars
 
 For the newly set environment variables to take effect and everything to work together correctly, we need to redeploy our app in Vercel. In your Vercel Dashboard, navigate to deployments, click the overflow menu button and select "Redeploy" (do NOT enable the "Use existing Build Cache" option). Once Vercel has rebuilt and redeployed your app, you're ready to set up your products and prices.
 
-#### Create product and pricing information
+#### 3.3 Create product and pricing information
 
 Your application's webhook listens for product updates on Stripe and automatically propagates them to your Supabase database. So with your webhook listener running, you can now create your product and pricing information in the [Stripe Dashboard](https://dashboard.stripe.com/test/products).
 
