@@ -26,23 +26,36 @@
 
 When deploying this template, the sequence of steps is important. Follow the steps below in order to get up and running.
 
-### Step 1: Initiate Deployment
+### Step 0: supabase setup
+There are two ways setup supabase when deploy saas on vercel
+* 1. using vercel integration version supabase which billed by vercel
+* 2. using supabase platform which billed by supabase
 
-#### Vercel Deploy Button
+#### 0. when using vercel integration supabase, following the steps
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FRocke1001feller%2Fnextjs-subscription-payments&env=NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,STRIPE_SECRET_KEY&envDescription=Enter%20your%20Stripe%20API%20keys.&envLink=https%3A%2F%2Fdashboard.stripe.com%2Fapikeys&project-name=nextjs-subscription-payments&repository-name=nextjs-subscription-payments&integration-ids=oac_VqOgBHqhEoFTPzGkPd7L0iH6&external-id=https%3A%2F%2Fgithub.com%2FRocke1001feller%2Fnextjs-subscription-payments%2Ftree%2Fmain)
-> [!IMPORTANT]
->  1. using vercel integration supabase, please check whether the necessary schema have setuped.
+| ![login vercel](./public/step_0_for_supabase.png) | ![setp 2](./public/step_0_1.png) |![check success](./public/step_0_2.png) |
+|--------|--------|--------|
 
-The Vercel Deployment will create a new repository with this template on your GitHub account and guide you through a new Supabase project creation. The [Supabase Vercel Deploy Integration](https://vercel.com/integrations/supabase) will set up the necessary Supabase environment variables and run the [SQL migrations](./supabase/migrations/20230530034630_init.sql) to set up the Database schema on your account. You can inspect the created tables in your project's [Table editor](https://app.supabase.com/project/_/editor).
-![supabase schema setup or not](./public/supabase_schema_setup.png)
-> [!IMPORTANT]
->  2. using supabase platform manually setup schema
-
-Should the automatic setup fail, please [create a Supabase account](https://app.supabase.com/projects), and a new project if needed. In your project, navigate to the [SQL editor](https://app.supabase.com/project/_/sql) and select the "Stripe Subscriptions" starter template from the Quick start section.
+#### 1. initial supabase with schema
 
 | ![setp 1](./public/supabase_sql_editor.png) | ![setp 2](./public/supabase_sql_execute.png) |![schema setup](./public/supabase_schema_setup.png) |
 |--------|--------|--------|
+> [!IMPORTANT]
+>  Make sure you get the schema ready when you move to next step
+
+![supabase schema setup or not](./public/supabase_schema_setup.png)
+
+### Step 1: Deploy to Vercel
+
+#### 1.1. deploy to vercel
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FRocke1001feller%2Fnextjs-subscription-payments&env=NEXT_PUBLIC_SUPABASE_URL,SUPABASE_SERVICE_ROLE_KEY,NEXT_PUBLIC_SUPABASE_ANON_KEY&envDescription=Enter%20your%20Stripe%20API%20keys.&envLink=https%3A%2F%2Fdashboard.stripe.com%2Fapikeys&project-name=nextjs-subscription-payments&repository-name=nextjs-subscription-payments&external-id=https%3A%2F%2Fgithub.com%2FRocke1001feller%2Fnextjs-subscription-payments%2Ftree%2Fmain)
+
+#### [optional] 1.2. fill all the [supabase enviroments variables]
+> you can references `.env.supabase.integration.example`, fill value with your own
+
+| ![project setting](./public/project_envs.png) | ![all parameters](./public/all_13_envs.png) |
+|--------|--------|
+
 ### Step 2: Configure Auth
 
 Follow [this guide](https://supabase.com/docs/guides/auth/social-login/auth-github) to set up an OAuth app with GitHub and configure Supabase to use it as an auth provider.
@@ -51,23 +64,6 @@ In your Supabase project, navigate to [auth > URL configuration](https://app.sup
 
 Next, in your Vercel deployment settings, add a new **Production** environment variable called `NEXT_PUBLIC_SITE_URL` and set it to the same URL. Make sure to deselect preview and development environments to make sure that preview branches and local development work correctly.
 
-#### [Optional] - Set up redirect wildcards for deploy previews (not needed if you installed via the Deploy Button)
-
-If you've deployed this template via the "Deploy to Vercel" button above, you can skip this step. The Supabase Vercel Integration will have set redirect wildcards for you. You can check this by going to your Supabase [auth settings](https://app.supabase.com/project/_/auth/url-configuration) and you should see a list of redirects under "Redirect URLs".
-
-Otherwise, for auth redirects (email confirmations, magic links, OAuth providers) to work correctly in deploy previews, navigate to the [auth settings](https://app.supabase.com/project/_/auth/url-configuration) and add the following wildcard URL to "Redirect URLs": `https://*-username.vercel.app/**`. You can read more about redirect wildcard patterns in the [docs](https://supabase.com/docs/guides/auth#redirect-urls-and-wildcards).
-
-If you've deployed this template via the "Deploy to Vercel" button above, you can skip this step. The Supabase Vercel Integration will have run database migrations for you. You can check this by going to [the Table Editor for your Supabase project](https://supabase.com/dashboard/project/_/editor), and confirming there are tables with seed data.
-
-Otherwise, navigate to the [SQL Editor](https://supabase.com/dashboard/project/_/sql/new), paste the contents of [the Supabase `schema.sql` file](./schema.sql), and click RUN to initialize the database.
-
-#### [Maybe Optional] - Set up Supabase environment variables (not needed if you installed via the Deploy Button)
-
-If you've deployed this template via the "Deploy to Vercel" button above, you can skip this step. The Supabase Vercel Integration will have set your environment variables for you. You can check this by going to your Vercel project settings, and clicking on 'Environment variables', there will be a list of environment variables with the Supabase icon displayed next to them.
-
-Otherwise navigate to the [API settings](https://app.supabase.com/project/_/settings/api) and paste them into the Vercel deployment interface. Copy project API keys and paste into the `NEXT_PUBLIC_SUPABASE_ANON_KEY` and `SUPABASE_SERVICE_ROLE_KEY` fields, and copy the project URL and paste to Vercel as `NEXT_PUBLIC_SUPABASE_URL`.
-
-Congrats, this completes the Supabase setup, almost there!
 
 ### Step 3: Configure Stripe
 
@@ -78,15 +74,19 @@ For the following steps, make sure you have the ["Test Mode" toggle](https://str
 #### 3.1 Create a Webhook
 
 We need to create a webhook in the `Developers` section of Stripe. Pictured in the architecture diagram above, this webhook is the piece that connects Stripe to your Vercel Serverless Functions.
+> [!IMPORTANT]
+> 
 
 1. Click the "Add Endpoint" button on the [test Endpoints page](https://dashboard.stripe.com/test/webhooks).
 1. Enter your production deployment URL followed by `/api/webhooks` for the endpoint URL. (e.g. `https://your-deployment-url.vercel.app/api/webhooks`)
 1. Click `Select events` under the `Select events to listen to` heading.
 1. Click `Select all events` in the `Select events to send` section.
 1. Copy `Signing secret` as we'll need that in the next step (e.g `whsec_xxx`) (/!\ be careful not to copy the webook id we_xxxx).
-1. In addition to the `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` and the `STRIPE_SECRET_KEY` we've set earlier during deployment, we need to add the webhook secret as `STRIPE_WEBHOOK_SECRET` env var.
 
-#### 3.2 Redeploy with new env vars
+#### 3.2 Set up all STRIP environments & [Redeploy]
+
+1. set the environments variables with `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` and the `STRIPE_SECRET_KEY` just like set supabase
+1. we need to add the webhook secret as `STRIPE_WEBHOOK_SECRET` env var.
 
 For the newly set environment variables to take effect and everything to work together correctly, we need to redeploy our app in Vercel. In your Vercel Dashboard, navigate to deployments, click the overflow menu button and select "Redeploy" (do NOT enable the "Use existing Build Cache" option). Once Vercel has rebuilt and redeployed your app, you're ready to set up your products and prices.
 
